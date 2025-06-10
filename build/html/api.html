@@ -1,0 +1,453 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Reference &mdash; Implementation of mlp architecture with backpropagation written from scrach 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=f2a433a1"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Implementation of mlp architecture with backpropagation written from scrach
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">API Reference</a><ul>
+<li><a class="reference internal" href="#main.DigitRecognizerApp"><code class="docutils literal notranslate"><span class="pre">DigitRecognizerApp</span></code></a><ul>
+<li><a class="reference internal" href="#main.DigitRecognizerApp.analyze_number"><code class="docutils literal notranslate"><span class="pre">DigitRecognizerApp.analyze_number()</span></code></a></li>
+<li><a class="reference internal" href="#main.DigitRecognizerApp.clear_canvas"><code class="docutils literal notranslate"><span class="pre">DigitRecognizerApp.clear_canvas()</span></code></a></li>
+<li><a class="reference internal" href="#main.DigitRecognizerApp.draw_line"><code class="docutils literal notranslate"><span class="pre">DigitRecognizerApp.draw_line()</span></code></a></li>
+<li><a class="reference internal" href="#main.DigitRecognizerApp.load_random_mnist_example"><code class="docutils literal notranslate"><span class="pre">DigitRecognizerApp.load_random_mnist_example()</span></code></a></li>
+<li><a class="reference internal" href="#main.DigitRecognizerApp.start_draw"><code class="docutils literal notranslate"><span class="pre">DigitRecognizerApp.start_draw()</span></code></a></li>
+<li><a class="reference internal" href="#main.DigitRecognizerApp.stop_draw"><code class="docutils literal notranslate"><span class="pre">DigitRecognizerApp.stop_draw()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#main.backward_propagate"><code class="docutils literal notranslate"><span class="pre">backward_propagate()</span></code></a></li>
+<li><a class="reference internal" href="#main.calculate_accuracy"><code class="docutils literal notranslate"><span class="pre">calculate_accuracy()</span></code></a></li>
+<li><a class="reference internal" href="#main.cross_entropy_loss"><code class="docutils literal notranslate"><span class="pre">cross_entropy_loss()</span></code></a></li>
+<li><a class="reference internal" href="#main.forward_propagate"><code class="docutils literal notranslate"><span class="pre">forward_propagate()</span></code></a></li>
+<li><a class="reference internal" href="#main.gelu"><code class="docutils literal notranslate"><span class="pre">gelu()</span></code></a></li>
+<li><a class="reference internal" href="#main.gelu_derivative"><code class="docutils literal notranslate"><span class="pre">gelu_derivative()</span></code></a></li>
+<li><a class="reference internal" href="#main.init_network"><code class="docutils literal notranslate"><span class="pre">init_network()</span></code></a></li>
+<li><a class="reference internal" href="#main.predict"><code class="docutils literal notranslate"><span class="pre">predict()</span></code></a></li>
+<li><a class="reference internal" href="#main.softmax"><code class="docutils literal notranslate"><span class="pre">softmax()</span></code></a></li>
+<li><a class="reference internal" href="#main.softmax_derivative"><code class="docutils literal notranslate"><span class="pre">softmax_derivative()</span></code></a></li>
+<li><a class="reference internal" href="#main.train_network"><code class="docutils literal notranslate"><span class="pre">train_network()</span></code></a></li>
+<li><a class="reference internal" href="#main.update_weights"><code class="docutils literal notranslate"><span class="pre">update_weights()</span></code></a></li>
+<li><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">DigitRecognizerApp</span></code></a><ul>
+<li><a class="reference internal" href="#id1"><code class="docutils literal notranslate"><span class="pre">DigitRecognizerApp.analyze_number()</span></code></a></li>
+<li><a class="reference internal" href="#id2"><code class="docutils literal notranslate"><span class="pre">DigitRecognizerApp.clear_canvas()</span></code></a></li>
+<li><a class="reference internal" href="#id3"><code class="docutils literal notranslate"><span class="pre">DigitRecognizerApp.draw_line()</span></code></a></li>
+<li><a class="reference internal" href="#id4"><code class="docutils literal notranslate"><span class="pre">DigitRecognizerApp.load_random_mnist_example()</span></code></a></li>
+<li><a class="reference internal" href="#id5"><code class="docutils literal notranslate"><span class="pre">DigitRecognizerApp.start_draw()</span></code></a></li>
+<li><a class="reference internal" href="#id6"><code class="docutils literal notranslate"><span class="pre">DigitRecognizerApp.stop_draw()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Implementation of mlp architecture with backpropagation written from scrach</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">API Reference</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-main">
+<span id="api-reference"></span><h1>API Reference<a class="headerlink" href="#module-main" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="main.DigitRecognizerApp">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">DigitRecognizerApp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">master</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.DigitRecognizerApp" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A Tkinter-based graphical user interface (GUI) for interactive digit recognition.</p>
+<p>Users can draw digits on a canvas, and the application will preprocess the drawing
+and use a trained neural network to predict the digit. It also allows loading
+and analyzing pre-existing MNIST examples.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="main.DigitRecognizerApp.analyze_number">
+<span class="sig-name descname"><span class="pre">analyze_number</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#main.DigitRecognizerApp.analyze_number" title="Link to this definition"></a></dt>
+<dd><p>Processes the drawn image, applies necessary transformations to match
+MNIST dataset characteristics, performs inference using the neural network,
+and displays the prediction results.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="main.DigitRecognizerApp.clear_canvas">
+<span class="sig-name descname"><span class="pre">clear_canvas</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#main.DigitRecognizerApp.clear_canvas" title="Link to this definition"></a></dt>
+<dd><p>Clears all content from the drawing canvas and resets associated display elements.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="main.DigitRecognizerApp.draw_line">
+<span class="sig-name descname"><span class="pre">draw_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.DigitRecognizerApp.draw_line" title="Link to this definition"></a></dt>
+<dd><p>Draws a line segment on both the Tkinter canvas and the internal Pillow image.</p>
+<p>This method is called continuously as the mouse is dragged with the left button pressed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="main.DigitRecognizerApp.load_random_mnist_example">
+<span class="sig-name descname"><span class="pre">load_random_mnist_example</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#main.DigitRecognizerApp.load_random_mnist_example" title="Link to this definition"></a></dt>
+<dd><p>Loads and displays a random MNIST test set example on the canvas.</p>
+<p>This method facilitates quick testing of the model’s performance on
+standardized dataset images and updates the display accordingly.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="main.DigitRecognizerApp.start_draw">
+<span class="sig-name descname"><span class="pre">start_draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.DigitRecognizerApp.start_draw" title="Link to this definition"></a></dt>
+<dd><p>Initiates a drawing stroke by recording the initial mouse coordinates.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="main.DigitRecognizerApp.stop_draw">
+<span class="sig-name descname"><span class="pre">stop_draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.DigitRecognizerApp.stop_draw" title="Link to this definition"></a></dt>
+<dd><p>Terminates the current drawing stroke by resetting the last recorded mouse coordinates.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="main.backward_propagate">
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">backward_propagate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expected_output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_activations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_pre_activations</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.backward_propagate" title="Link to this definition"></a></dt>
+<dd><p>Performs the backward pass (backpropagation) to compute gradients.</p>
+<p>This algorithm calculates the error contribution of each weight in the network,
+propagating the error signal from the output layer back through hidden layers.
+It produces gradients used to update the network’s weights.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>network (list[numpy.ndarray]): The network’s weight matrices.
+expected_output (numpy.ndarray): The one-hot encoded true label for the sample.
+all_activations (list[numpy.ndarray]): List of activations from the forward pass.
+all_pre_activations (list[numpy.ndarray]): List of pre-activation values (z) from the forward pass.</p>
+</dd>
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>list[numpy.ndarray]: A list of NumPy arrays, where each array is the gradient</dt><dd><p>matrix for a corresponding layer’s weights.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="main.calculate_accuracy">
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">calculate_accuracy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.calculate_accuracy" title="Link to this definition"></a></dt>
+<dd><p>Evaluates the accuracy of the neural network on a given dataset.</p>
+<p>It calculates the percentage of correctly classified samples
+by comparing the network’s predictions against the true labels.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>network (list[numpy.ndarray]): The trained neural network.
+X_data (numpy.ndarray): Input features (e.g., images) to evaluate.
+y_data (numpy.ndarray): True labels corresponding to the input features.</p>
+</dd>
+<dt>Returns:</dt><dd><p>float: The accuracy as a percentage (0-100%).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="main.cross_entropy_loss">
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">cross_entropy_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predictions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.cross_entropy_loss" title="Link to this definition"></a></dt>
+<dd><p>Computes the categorical cross-entropy loss.</p>
+<p>This loss function quantifies the difference between the predicted probability
+distribution and the true probability distribution (one-hot encoded targets),
+commonly used in multi-class classification. Predictions are clipped to prevent
+logarithm of zero.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>predictions (numpy.ndarray): Predicted probabilities from the network’s output.
+targets (numpy.ndarray): True labels in one-hot encoded format.</p>
+</dd>
+<dt>Returns:</dt><dd><p>float: The calculated cross-entropy loss value.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="main.forward_propagate">
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">forward_propagate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_row</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.forward_propagate" title="Link to this definition"></a></dt>
+<dd><p>Performs the forward pass through the neural network.</p>
+<p>It computes the activations for each layer sequentially,
+applying weights and activation functions. Intermediate activations
+and pre-activations (weighted sums) are stored for use in backpropagation.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>network (list[numpy.ndarray]): The list of weight matrices defining the network.
+input_row (numpy.ndarray): A single input sample.</p>
+</dd>
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>tuple[numpy.ndarray, list, list]:</dt><dd><ul class="simple">
+<li><p>final_output (numpy.ndarray): The probabilities from the output layer.</p></li>
+<li><p>all_activations (list[numpy.ndarray]): Activations (outputs) of all layers, including input.</p></li>
+<li><p>all_pre_activations (list[numpy.ndarray]): Pre-activation values (z) for all layers.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="main.gelu">
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">gelu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.gelu" title="Link to this definition"></a></dt>
+<dd><p>Applies the GELU (Gaussian Error Linear Unit) activation function.</p>
+<p>GELU is a smooth non-linear activation function used in hidden layers
+to introduce non-linearity, enabling the network to learn complex relationships.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>x (numpy.ndarray): Input values to the activation function.</p>
+</dd>
+<dt>Returns:</dt><dd><p>numpy.ndarray: Output after applying the GELU activation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="main.gelu_derivative">
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">gelu_derivative</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.gelu_derivative" title="Link to this definition"></a></dt>
+<dd><p>Computes the derivative of the GELU activation function.</p>
+<p>This derivative is essential for the backpropagation algorithm to calculate
+gradients for weights in hidden layers. This implementation uses a common approximation.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>x (numpy.ndarray): Input values (pre-activation, z) to the GELU function.</p>
+</dd>
+<dt>Returns:</dt><dd><p>numpy.ndarray: The derivative of GELU with respect to x.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="main.init_network">
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">init_network</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_neurons_per_hidden_layer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_hidden_layers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_outputs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.init_network" title="Link to this definition"></a></dt>
+<dd><p>Initializes the Multi-Layer Perceptron (MLP) network architecture.</p>
+<p>This function sets up the weight matrices for each layer, including bias terms.
+Weights are initialized using the Glorot (Xavier) uniform distribution,
+which helps stabilize gradients during the initial phases of training.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>n_inputs (int): Number of input features.
+n_neurons_per_hidden_layer (int): Number of neurons in each hidden layer.
+num_hidden_layers (int): Total number of hidden layers.
+n_outputs (int): Number of output classes.</p>
+</dd>
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>list[numpy.ndarray]: A list of NumPy arrays, where each array represents</dt><dd><p>the weights for a specific layer, including the bias column.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="main.predict">
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_row</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.predict" title="Link to this definition"></a></dt>
+<dd><p>Generates a prediction for a single input sample using the trained network.</p>
+<p>Performs a forward pass and determines the class with the highest predicted probability.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>network (list[numpy.ndarray]): The trained neural network’s weight matrices.
+input_row (numpy.ndarray): A single input sample (e.g., a flattened image).</p>
+</dd>
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>tuple[numpy.int64, numpy.ndarray]:</dt><dd><ul class="simple">
+<li><p>predicted_digit (numpy.int64): The index of the predicted class (0-9).</p></li>
+<li><p>probabilities (numpy.ndarray): The full array of probabilities for all output classes.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="main.softmax">
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">softmax</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.softmax" title="Link to this definition"></a></dt>
+<dd><p>Applies the Softmax activation function.</p>
+<p>Softmax converts a vector of arbitrary real values into a probability distribution
+over predicted output classes. It ensures numerical stability by
+subtracting the maximum input value before exponentiation.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>x (numpy.ndarray): Input array of real values (logits) for the output layer.</p>
+</dd>
+<dt>Returns:</dt><dd><p>numpy.ndarray: An array of probabilities summing to 1.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="main.softmax_derivative">
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">softmax_derivative</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">softmax_output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expected_output</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.softmax_derivative" title="Link to this definition"></a></dt>
+<dd><p>Computes the error term (delta) for the output layer when combined
+with the Cross-Entropy Loss function.</p>
+<p>For Softmax with Cross-Entropy Loss, the derivative simplifies to
+the difference between the predicted probabilities and the true (one-hot encoded) probabilities.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>softmax_output (numpy.ndarray): The actual output probabilities from the softmax layer.
+expected_output (numpy.ndarray): The one-hot encoded true label.</p>
+</dd>
+<dt>Returns:</dt><dd><p>numpy.ndarray: The error term (delta) for the output layer, used in backpropagation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="main.train_network">
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">train_network</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_epochs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evaluation_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.train_network" title="Link to this definition"></a></dt>
+<dd><p>Trains the neural network using stochastic gradient descent.</p>
+<p>The network processes the training data for a specified number of epochs.
+In each iteration, a sample is forward-propagated, its error is computed,
+gradients are backpropagated, and weights are updated. Training accuracy
+is periodically evaluated and plotted.</p>
+<dl>
+<dt>Args:</dt><dd><p>network (list[numpy.ndarray]): The neural network model to be trained.
+train_X (numpy.ndarray): Training input features.
+train_y (numpy.ndarray): True labels for the training data.
+learning_rate (float): The step size for weight updates.
+n_epochs (int): The number of complete passes over the training dataset.
+evaluation_frequency (int, optional): Frequency (in samples processed)</p>
+<blockquote>
+<div><p>for evaluating and printing training accuracy. Defaults to 1000.</p>
+</div></blockquote>
+</dd>
+<dt>Returns:</dt><dd><p>list[numpy.ndarray]: The trained neural network’s weight matrices.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="main.update_weights">
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">update_weights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradients</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.update_weights" title="Link to this definition"></a></dt>
+<dd><p>Adjusts the network’s weights using gradient descent.</p>
+<p>Each weight is updated in the direction that minimizes the loss, scaled by
+the learning rate to control the step size.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>network (list[numpy.ndarray]): The network’s weight matrices to be updated.
+gradients (list[numpy.ndarray]): The calculated gradients for each weight.
+learning_rate (float): The step size for weight adjustments.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="id0">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">DigitRecognizerApp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">master</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A Tkinter-based graphical user interface (GUI) for interactive digit recognition.</p>
+<p>Users can draw digits on a canvas, and the application will preprocess the drawing
+and use a trained neural network to predict the digit. It also allows loading
+and analyzing pre-existing MNIST examples.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">analyze_number</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd><p>Processes the drawn image, applies necessary transformations to match
+MNIST dataset characteristics, performs inference using the neural network,
+and displays the prediction results.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">clear_canvas</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
+<dd><p>Clears all content from the drawing canvas and resets associated display elements.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">draw_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
+<dd><p>Draws a line segment on both the Tkinter canvas and the internal Pillow image.</p>
+<p>This method is called continuously as the mouse is dragged with the left button pressed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">load_random_mnist_example</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
+<dd><p>Loads and displays a random MNIST test set example on the canvas.</p>
+<p>This method facilitates quick testing of the model’s performance on
+standardized dataset images and updates the display accordingly.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id5">
+<span class="sig-name descname"><span class="pre">start_draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
+<dd><p>Initiates a drawing stroke by recording the initial mouse coordinates.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id6">
+<span class="sig-name descname"><span class="pre">stop_draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
+<dd><p>Terminates the current drawing stroke by resetting the last recorded mouse coordinates.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Tymon Roslen.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
